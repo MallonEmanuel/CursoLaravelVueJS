@@ -14,3 +14,12 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/viandas', 'ViandasController@index')->name('viandas');
+Route::get('/vianda', 'ViandasController@edit')->name('vianda');
+
+Route::get('/personas', 'PersonasController@index')->name('personas');
+Route::get('/persona', 'PersonasController@edit')->name('persona');
+
+Route::get('/pedidos', 'PedidosController@index')->name('pedidos');
+Route::get('/pedido', 'PedidosController@edit')->name('pedido');
