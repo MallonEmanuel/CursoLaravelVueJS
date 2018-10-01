@@ -11,8 +11,13 @@ class PersonasController extends Controller
       return view('personas.index');
   }
 
-  public function edit()
+  public function edit($id)
   {
-      return view('personas.edit');
+    if($id == 'nueva'){
+      return view('personas.edit', ['persona' => null]);
+    }else{
+      // $pedidoResource = new PedidoResource($pedido);
+      return view('personas.edit', ['persona' => $id]);
+    }
   }
 }

@@ -11,8 +11,13 @@ class ViandasController extends Controller
         return view('viandas.index');
     }
 
-    public function edit()
+    public function edit($id)
     {
-        return view('viandas.edit');
+      if($id == 'nueva'){
+        return view('viandas.edit', ['vianda' => null]);
+      }else{
+        // $pedidoResource = new PedidoResource($pedido);
+        return view('viandas.edit', ['vianda' => $id]);
+      }
     }
 }

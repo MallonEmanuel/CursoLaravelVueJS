@@ -7,7 +7,7 @@
                 </div>
                 <div class="float-right">
                     <div class="btn-group">
-                        <a class="btn btn-outline-info" href="/vianda" role="button">Crear Vianda</a>
+                        <a class="btn btn-outline-info" href="/vianda/nueva" role="button">Crear Vianda</a>
                     </div>
                 </div>
             </div>
@@ -26,6 +26,15 @@
                       <td>{{vianda.descripcion}}</td>
                       <td>{{vianda.precio}}</td>
                       <td>{{vianda.vegetariana == 0 ? 'No' : 'Si'}}</td>
+                      <td>
+                        <!-- <button type="button" class="btn-outline-danger btn-sm" v-on:click="remove(vianda.id)" >
+                          <v-icon name="trash"/>
+                        </button> -->
+
+                        <button type="button" class="btn-outline-success btn-sm" v-on:click="edit(vianda.id)" >
+                          <v-icon name="edit"/>
+                        </button>
+                      </td>
                   </tr>
                   <tr v-if="!viandas">
                       <td colspan="8">No hay registro !!</td>
@@ -45,7 +54,7 @@ export default {
         return {
             viandas: [],
             pageCount: 1,
-            endpoint: 'api/viandas?page='
+            endpoint: 'api/viandas'
         };
     },
 
@@ -54,18 +63,28 @@ export default {
     },
 
     methods: {
-        fetch(page = 1) {
-            axios.get(this.endpoint + page)
+        fetch() {
+            axios.get(this.endpoint)
             .then(({data}) => {
                 this.viandas = data.data;
             //    this.pageCount = data.meta.last_page;
             });
         },
-
+        edit(id){
+            window.location.href='/vianda/'+id;
+        },
         remove(id) {
-            this.viandas = _.remove(this.viandas, function (vianda) {
-                return vianda.id !== id;
+          if(confirm("Esta seguro que desea eliminar la vianda "+ id)){
+            axios.delete(this.endpoint+id)
+            .then(({data}) => {
+                  alert("Vianda"+id +" eliminada");
+                  this.viandas = _.remove(this.viandas, function (vianda) {
+                      return vianda.id !== id;
+                  });
             });
+          }
+
+
         }
     }
 }

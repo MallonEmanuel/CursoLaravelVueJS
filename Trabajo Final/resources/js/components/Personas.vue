@@ -7,7 +7,7 @@
                 </div>
                 <div class="float-right">
                     <div class="btn-group">
-                        <a class="btn btn-outline-info" href="/persona" role="button">Crear Persona</a>
+                        <a class="btn btn-outline-info" href="/persona/nueva" role="button">Crear Persona</a>
                     </div>
                 </div>
             </div>
@@ -24,6 +24,12 @@
                       <td>{{persona.nombre}}</td>
                       <td>{{persona.apellido}}</td>
                       <td>{{persona.email}}</td>
+                      <td>
+
+                        <button type="button" class="btn-outline-success btn-sm" v-on:click="edit(persona.id)" >
+                          <v-icon name="edit"/>
+                        </button>
+                      </td>
                   </tr>
                   <tr v-if="!personas">
                       <td colspan="8">No hay registro !!</td>
@@ -52,6 +58,9 @@ export default {
     },
 
     methods: {
+        edit(id){
+            window.location.href='/persona/'+id;
+        },
         fetch(page = 1) {
             axios.get(this.endpoint + page)
             .then(({data}) => {

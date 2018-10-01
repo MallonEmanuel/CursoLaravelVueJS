@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+// use App\Http\Controllers\Api\PedidoController;
+use App\Pedido;
+use App\Http\Resources\PedidoResource;
 class PedidosController extends Controller
 {
     public function index()
@@ -11,8 +13,14 @@ class PedidosController extends Controller
         return view('pedidos.index');
     }
 
-    public function edit()
+    public function edit($id)
     {
-        return view('pedidos.edit');
+ 
+        if($id == 'nuevo'){
+          return view('pedidos.edit', ['pedido' => null]);
+        }else{
+          // $pedidoResource = new PedidoResource($pedido);
+          return view('pedidos.edit', ['pedido' => $id]);
+        }
     }
 }

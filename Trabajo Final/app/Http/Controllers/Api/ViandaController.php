@@ -35,7 +35,7 @@ class ViandaController extends Controller{
         return new ViandaResource($vianda);
     }
 
-        public function update(Request $request, $id)    {
+    public function update(Request $request, $id){
         //
         $this->validate($request,[
         	'nombre'=>'required',
@@ -46,8 +46,23 @@ class ViandaController extends Controller{
 
         $vianda = Vianda::find($id);
 
-        $vianda->update($request->all());
+        // $vianda->update($request->all());
+        $vianda->nombre = $request->nombre;
+        $vianda->descripcion = $request->descripcion;
+        $vianda->precio = $request->precio;
+        $vianda->vegetariana = $request->vegetariana;
+        $vianda->save();
 
         return new ViandaResource($vianda);
+    }
+
+    public function destroy($id){
+        $vianda = Vianda::find($id);
+        if($vianda == null){
+          return ["error"=>"No existe la vianda"];
+        }else{
+          Vianda::destroy($id);
+          return new ViandaResource($vianda);
+        }
     }
 }

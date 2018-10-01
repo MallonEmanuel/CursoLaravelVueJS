@@ -19,6 +19,7 @@
 					<input type="text" v-model="persona.email" class="form-control input-sm" placeholder="Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
 				</div>
 				<button type="submit" class="btn btn-primary">Guardar</button>
+				<button  type="button"class="btn btn-success" onclick="window.location.href='/personas'">Cancelar</button>
 			</form>
 		</div>
 	</div>
@@ -26,6 +27,17 @@
 
 <script>
 export default {
+	props:['persona_id'],
+	// mounted() {
+	//    // let app = this;
+	//    let id = this.$route.params.id;
+	//    // app.companyId = id;
+	//    axios.get('/api/personas/' + id)
+	//      .then(function (resp) { this.persona = resp.data;})
+	//      .catch(function () {
+	//              alert("Could not load your company")
+	//      });
+  // },
 
 	data() {
 		return {
@@ -38,14 +50,34 @@ export default {
 			}
 		};
 	},
-
+	created() {
+			this.fetchPersona();
+	},
 	methods: {
 		onSubmit() {
 			this.saved = false;
 
-			axios.post('api/personas', this.persona)
-			.then(({data}) => this.setSuccessMessage())
-			.catch(({response}) => this.setErrors(response));
+			if(this.persona.id == null){
+				axios.post('../api/personas', this.persona)
+				.then(({data}) => this.setSuccessMessage())
+				.catch(({response}) => this.setErrors(response));
+			}else{
+				// Modifica un pedido existente
+				axios.put('../api/personas/'+this.persona.id, this.persona)
+				.then(({data}) => this.setSuccessMessage())
+				.catch(({response}) => this.setErrors(response));
+			}
+		},
+
+		fetchPersona(){
+			if(this.persona_id == null){
+				return;
+			}
+			 axios.get("../api/personas/"+this.persona_id)
+			 .then(({data}) => {
+					 this.persona= data.data;
+					 console.log(this.persona.id);
+			 }).catch(({response}) => this.setErrors(response));
 		},
 
 		setErrors(response) {
@@ -58,6 +90,7 @@ export default {
 		},
 
 		reset() {
+			window.location.href='/personas';
 			this.errors = [];
 			this.persona = {nombre: null, apellido: null, email: null};
 		}

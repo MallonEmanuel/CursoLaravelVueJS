@@ -19,6 +19,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::resource('viandas', 'Api\ViandaController');
 
+// Route::post('viandas/{id}', 'Api\ViandaController@update');
+
 Route::resource('personas', 'Api\PersonaController');
+
+Route::get('personas/search/{nombre}/{apellido}/{email}', 'Api\PersonaController@search');
 
 Route::resource('pedidos', 'Api\PedidoController');

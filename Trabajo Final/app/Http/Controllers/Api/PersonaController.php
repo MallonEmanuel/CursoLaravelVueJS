@@ -16,6 +16,15 @@ class PersonaController extends Controller
           return PersonaResource::collection($personas);
       }
 
+
+      public function search($nombre, $apellido, $email){
+
+          $personas = Persona::where('nombre', 'like', '%' .$nombre . '%')
+                             ->orWhere('apellido', 'like', '%' . $apellido . '%')
+                             ->orWhere('email', 'like', '%' . $email . '%')->get();
+          return PersonaResource::collection($personas);
+      }
+
       public function show(Persona $persona){
           return new PersonaResource($persona);
       }

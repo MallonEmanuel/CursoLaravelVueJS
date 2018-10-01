@@ -7,7 +7,7 @@
                 </div>
                 <div class="float-right">
                     <div class="btn-group">
-                        <a class="btn btn-outline-info" href="/pedido" role="button">Crear Pedido</a>
+                        <a class="btn btn-outline-info" href="/pedido/nuevo" role="button">Crear Pedido</a>
                     </div>
                 </div>
             </div>
@@ -15,6 +15,7 @@
                 <div class="table-container">
                   <table id="mytable" class="table table-bordred table-striped">
                      <thead>
+                       <th>#</th>
                        <th>Fecha Solicitud</th>
                        <th>Fecha Entrega</th>
                        <th>Persona</th>
@@ -23,13 +24,18 @@
                    </thead>
                    <tbody>
                     <tr v-for="pedido in pedidos" v-if="pedidos">
+                      <td>{{pedido.id}}</td>
                       <td>{{pedido.fecha_solicitud}}</td>
-                      <td>{{pedido.fecha_entrega == null? 'no entregado':pedido.fecha_entrega }}</td>
+                      <td >{{pedido.fecha_entrega == null? 'no entregado':pedido.fecha_entrega }} </td>
                       <td>{{pedido.persona.nombre+" "+pedido.persona.apellido}}</td>
                       <td>{{pedido.vianda.nombre}}</td>
                       <td>
-                        <button type="button" class="btn btn-danger btn-sm" v-on:click="remove(pedido.id)" >T
-                          <span class="glyphicon glyphicon-envelope"></span>
+                        <button type="button" class="btn-outline-danger btn-sm" v-on:click="remove(pedido.id)" >
+                          <v-icon name="trash"/>
+                        </button>
+
+                        <button type="button" class="btn-outline-success btn-sm" v-on:click="edit(pedido.id)" >
+                          <v-icon name="edit"/>
                         </button>
                       </td>
                   </tr>
@@ -46,6 +52,7 @@
 
 <script>
 export default {
+    // name: 'pedidos',
 
     data() {
         return {
@@ -60,23 +67,26 @@ export default {
     },
 
     methods: {
-        fetch(page = 1) {
+        fetch() {
             axios.get(this.endpoint)
             .then(({data}) => {
                 this.pedidos = data.data;
-                // this.pageCount = data.meta.last_page;
             });
         },
-
+        edit(id){
+            window.location.href='/pedido/'+id;
+        },
         remove(id) {
+          if(confirm("Esta seguro que desea eliminar el pedido "+ id)){
             axios.delete(this.endpoint+id)
             .then(({data}) => {
-                this.pedidos = data.data;
-                // this.pageCount = data.meta.last_page;
-                this.pedidos = _.remove(this.pedidos, function (pedido) {
-                    return pedido.id !== id;
+                  alert("Pedido "+id +" eliminado");
+                  this.pedidos = _.remove(this.pedidos, function (pedido) {
+                  return pedido.id !== id;
                 });
+
             });
+          }
 
         }
     }

@@ -25,12 +25,9 @@
 					</label>
 				</div>
 
-				<!-- <div class="form-group">
-					<label>Imagen</label>
-					<b-form-file type="number" v-model="vianda.img" capture></b-form-file>
-				</div> -->
 
 				<button type="submit" class="btn btn-primary">Guardar</button>
+				<button  type="button"class="btn btn-success" onclick="window.location.href='/viandas'">Cancelar</button>
 			</form>
 		</div>
 	</div>
@@ -38,29 +35,50 @@
 
 <script>
 export default {
+	props: ['vianda_id'],
 
 	data() {
 		return {
 			errors: [],
 			saved: false,
 			vianda: {
+				id : null,
 				nombre: null,
 				descripcion: null,
 				precio: 0,
-				vegetariana: false,
-				img: null
+				vegetariana: false
 			}
 		};
+	},
+	created() {
+			this.fetchVianda();
 	},
 
 	methods: {
 		onSubmit() {
-			// this.saved = false;
-			console.log(this.vianda.img);
+			this.saved = false;
 
-			// axios.post('api/viandas', this.vianda)
-			// .then(({data}) => this.setSuccessMessage())
-			// .catch(({response}) => this.setErrors(response));
+			if(this.vianda.id == null){
+				axios.post('../api/viandas', this.vianda)
+				.then(({data}) => this.setSuccessMessage())
+				.catch(({response}) => this.setErrors(response));
+			}else{
+				// Modifica un pedido existente
+				axios.put('../api/viandas/'+this.vianda.id, this.vianda)
+				.then(({data}) => this.setSuccessMessage())
+				.catch(({response}) => this.setErrors(response));
+			}
+		},
+
+		fetchVianda(){
+			if(this.vianda_id == null){
+				return;
+			}
+			 axios.get("../api/viandas/"+this.vianda_id)
+			 .then(({data}) => {
+					 this.vianda = data.data;
+					 console.log(this.vianda.id);
+			 }).catch(({response}) => this.setErrors(response));
 		},
 
 		setErrors(response) {
@@ -73,6 +91,7 @@ export default {
 		},
 
 		reset() {
+			window.location.href='/viandas';
 			this.errors = [];
 			this.vianda = {nombre: null, descripcion: null, precio: 0, vegetariana: false};
 		}

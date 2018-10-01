@@ -27,17 +27,28 @@ Vue.component('pedidos', require('./components/Pedidos.vue'));
 Vue.component('pedido-form', require('./components/PedidoForm.vue'));
 
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead';
-
 Vue.component('vue-bootstrap-typeahead', VueBootstrapTypeahead);
 
 
-import Vue from 'vue';
-import BootstrapVue from 'bootstrap-vue';
 
+// import Vue from 'vue';
+
+import BootstrapVue from 'bootstrap-vue';
 Vue.use(BootstrapVue);
 
-Vue.component('paginate', require('vuejs-paginate'));
+// or import all icons if you don't care about bundle size
+import 'vue-awesome/icons'
+import Icon from 'vue-awesome/components/Icon';
+Vue.component('v-icon', Icon);
+
+// import * as uiv from 'uiv';
+// Vue.use(uiv);
+// Vue.use(uiv, {prefix: 'uiv'});
+
+import Typeahead from './components/Typeahead';
+Vue.component('typeahead', Typeahead);
+
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
 });
